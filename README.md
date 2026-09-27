@@ -22,10 +22,11 @@ dev-scaffold/
 ├── README.md            本文件
 ├── 设计说明.md          核心设计思路（七大支柱，含每条的理由）
 └── template/            ← 新项目时把此目录内容复制到项目根目录
-    ├── .codebuddy/rules/project-rules.md   项目规则（WorkBuddy 自动加载）
-    ├── .workbuddy/memory/MEMORY.md          项目记忆（知识沉淀，非规则）
-    ├── .gitignore                          通用忽略规则（含凭据/产物/多语言）
-    ├── .env.example                        凭据占位模板
+    ├── AGENTS.md                          项目规则（跨 AI 工具通用权威源，唯一正文）
+    ├── CLAUDE.md                          Claude Code 入口（一行 @AGENTS.md 引入）
+    ├── .workbuddy/memory/MEMORY.md        项目记忆（知识沉淀，非规则）
+    ├── .gitignore                         通用忽略规则（含凭据/产物/多语言）
+    ├── .env.example                       凭据占位模板
     └── doc/
         ├── 00-项目总览与协作规范.md          （模板，含多工具规则映射）
         ├── 01-架构设计与决策记录.md          （模板，含 D 表格式）
@@ -38,7 +39,7 @@ dev-scaffold/
 ## 新项目启用五步
 
 1. 复制：把 `template/` 下全部内容（含隐藏目录）复制到新项目根目录
-2. 改规则：`.codebuddy/rules/project-rules.md` 中替换 `{{占位符}}`——项目名、技术栈、目录结构；技术栈定稿前可先留空
+2. 改规则：`AGENTS.md` 中替换 `{{占位符}}`——项目名、技术栈、目录结构；技术栈定稿前可先留空
 3. 改文档：`doc/00` 填项目背景与机器/环境分工；`doc/05` 写里程碑计划
 4. 初始化：`git init && git add -A && git commit`；凭据进 `.env`（从 `.env.example` 复制，永不入库）
 5. 开工：新 AI 会话第一句 = 读规则 + doc/05 + 会话交接板；此后按铁律接力
@@ -52,13 +53,13 @@ git push -u origin main
 ```
 建议仓库保持**私有**（含工程规范虽不涉密，但工作流细节暴露给公众无益）。新项目使用本模板时，同样按私有仓库起步。
 
-## 规则文件机制速查（核实过的事实）
+## AI 工具兼容机制速查（核实过的事实）
 
-| 工具 | 自动加载的项目规则路径 |
+| 工具 | 规则加载 |
 |---|---|
-| WorkBuddy（CodeBuddy 内核） | `.codebuddy/rules/*.md`（规则）；`.workbuddy/memory/`（记忆注入）；兼容根目录 `CODEBUDDY.md` / `AGENTS.md` |
-| Claude Code | 根目录 `CLAUDE.md` |
-| ZCode | 根目录 `AGENTS.md` 等约定路径 |
-| Trae | `.trae/rules/` |
+| WorkBuddy / CodeBuddy、ZCode、opencode、Cursor、Codex、Gemini CLI | 根目录 **`AGENTS.md`**（原生或官方兼容，零配置） |
+| Claude Code | 根目录 `CLAUDE.md`（模板已含一行 `@AGENTS.md` 引入） |
+| Trae | `.trae/rules/`（无引入机制，需复制正文并保持同步） |
+| 其他（dsh 等） | 以其官方文档为准；遵循 AGENTS.md 约定则零配置 |
 
-**要点**：规则与记忆必须分离；同一时刻只启用主力工具的一套根目录规则，避免相同内容被重复注入上下文。
+**要点**：规则正文只存 `AGENTS.md` 一份；其他入口只允许一行引入（Trae 除外）；规则与记忆分离（`.workbuddy/memory/` 是记忆不是规则）。

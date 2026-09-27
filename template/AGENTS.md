@@ -1,6 +1,7 @@
-# {{项目名}} · 项目规则
+# {{项目名}} · 项目规则（AGENTS.md，跨 AI 工具通用权威源）
 
-> 本文件由 WorkBuddy（.codebuddy/rules/）自动加载，是项目规则的**权威源**。
+> 本文件是**全项目唯一的规则正文**，被主流 AI 工具自动加载：WorkBuddy/CodeBuddy、Claude Code、ZCode、opencode、Cursor、Codex、Gemini CLI 等（各自对 AGENTS.md 有原生或兼容支持）。
+> 其他工具的入口文件（如 CLAUDE.md）只允许**一行引入本文件**，禁止复制正文——避免多份规则重复注入上下文和版本漂移。
 > 项目记忆在 `.workbuddy/memory/`（知识沉淀，非规则）；设计与进度事实来源在 `doc/`。
 
 ## 一、项目一句话

@@ -1,6 +1,6 @@
 # {{项目名}} · 项目记忆（WorkBuddy 自动注入）
 
-> **规则文件**：`.codebuddy/rules/project-rules.md`（自动加载，规则以它为准）
+> **规则文件**：根目录 `AGENTS.md`（跨 AI 工具通用权威源，自动加载，规则以它为准）
 > 本文件只放项目知识沉淀，不承载规则。限额 3000 字符，只留跨会话有价值的稳定事实。
 
 ## 当前状态
@@ -10,7 +10,7 @@
 
 ## 开工必读顺序
 
-1. `.codebuddy/rules/project-rules.md`（规则）
+1. `AGENTS.md`（规则）
 2. `doc/05-里程碑与进度.md` → `doc/会话交接.md`
 3. git pull
 
