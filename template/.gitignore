@@ -1,0 +1,52 @@
+# ── 凭据与环境（永远第一位）──────────────────────────
+.env
+*.env.local
+*.env.*.local
+*.token
+*.key
+*.pem
+*.p12
+credentials*.json
+secrets*
+
+# ── Python ───────────────────────────────────────────
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# ── Node / 前端 ──────────────────────────────────────
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+*.local
+
+# ── Android / APP ────────────────────────────────────
+*.apk
+*.aab
+*.jks
+*.keystore
+.gradle/
+local.properties
+android/.idea/
+ios/Pods/
+
+# ── 运行数据与日志（产物绝不入库）────────────────────
+*.db
+*.sqlite3
+data/
+logs/
+*.log
+
+# ── IDE / 系统 ───────────────────────────────────────
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
