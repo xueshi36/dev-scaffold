@@ -241,6 +241,8 @@ def main() -> None:
     print("  1. 补齐上述残留占位符（doc/00 背景、doc/05 里程碑计划等）")
     print("  2. 凭据从 .env.example 复制为 .env 填写（永不入库）")
     print("  3. 开首个 AI 会话：读 AGENTS.md + doc/05 + doc/会话交接.md")
+    print("  4. （可选）多工具共享记忆：把其他 AI 工具的全局记忆目录软链接到")
+    print("     .workbuddy/memory/，操作规范与三坑见 template/doc/00 §3.4")
     if not git_done and want_git and not args.no_git:
         print("  4. （git 未初始化成功，请手动 git init && git add -A && git commit）")
 

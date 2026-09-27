@@ -73,9 +73,10 @@ git push -u origin main
 | 工具 | 规则加载 | 证据 |
 |---|---|---|
 | WorkBuddy / CodeBuddy | 根目录 `AGENTS.md`；`.codebuddy/rules/*.md` 亦自动加载；`.workbuddy/memory/` 记忆注入 | AGENTS.md=📄官方文档+社区多源印证；后两者=✅实测（2026-09-27 真实项目会话） |
-| ZCode、opencode、Cursor、Codex、Gemini CLI | 根目录 **`AGENTS.md`** | 📄各自官方文档（AGENTS.md 开放标准） |
-| Claude Code | 根目录 `CLAUDE.md`（模板已含一行 `@AGENTS.md` 引入） | 📄官方文档（import 机制） |
+| ZCode | 根目录 `AGENTS.md`（含符号链接形式） | ✅实测（2026-09-27：AGENTS.md 软链接被自动注入；记忆目录软链接共享 `.workbuddy/memory/` 读写均通） |
+| opencode、Cursor、Codex、Gemini CLI、Windsurf、Zed | 根目录 **`AGENTS.md`**（opencode 以 CLAUDE.md 兜底） | 📄各自官方文档（AGENTS.md 开放标准采纳列表） |
+| Claude Code | ≥v2.1.277 原生读 `AGENTS.md`（无 CLAUDE.md 时）；模板已含 `CLAUDE.md`（一行 `@AGENTS.md`，新旧版本通吃） | 📄官方文档（memory 页，明确认可 `ln -s` 符号链接共享） |
 | Trae | `.trae/rules/`（无引入机制，需复制正文并保持同步） | ❓未实测 |
-| 其他（dsh 等） | 以其官方文档为准；遵循 AGENTS.md 约定则零配置 | — |
+| 其他（dsh 等） | 以其官方文档为准；遵循 AGENTS.md 约定则零配置 | ❓dsh 官方文档未确认项目级 AGENTS.md 自动加载，接入前先实测 |
 
-**要点**：规则正文只存 `AGENTS.md` 一份；其他入口只允许一行引入（Trae 除外）；规则与记忆分离（`.workbuddy/memory/` 是记忆不是规则）。WorkBuddy 求稳可两者都放：`.codebuddy/rules/` 放一行指针指向 AGENTS.md。
+**要点**：规则正文只存 `AGENTS.md` 一份；其他入口只允许一行引入或符号链接（Trae 除外）；规则与记忆分离（`.workbuddy/memory/` 是记忆不是规则）。WorkBuddy 求稳可两者都放：`.codebuddy/rules/` 放一行指针指向 AGENTS.md。符号链接桥接的操作规范与三坑（Windows 提权 / 跨机相对路径 / git 可移植性）见 `template/doc/00` §3.4。

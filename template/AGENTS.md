@@ -1,7 +1,7 @@
 # {{项目名}} · 项目规则（AGENTS.md，跨 AI 工具通用权威源）
 
-> 本文件是**全项目唯一的规则正文**，被主流 AI 工具自动加载：WorkBuddy/CodeBuddy、Claude Code、ZCode、opencode、Cursor、Codex、Gemini CLI 等（各自对 AGENTS.md 有原生或兼容支持）。
-> 其他工具的入口文件（如 CLAUDE.md）只允许**一行引入本文件**，禁止复制正文——避免多份规则重复注入上下文和版本漂移。
+> 本文件是**全项目唯一的规则正文**，被主流 AI 工具自动加载：WorkBuddy/CodeBuddy、ZCode、opencode、Claude Code（≥v2.1.277 原生；旧版经 CLAUDE.md 引入）、Cursor、Codex、Gemini CLI 等（各自官方文档确认，证据等级见 doc/00 §3.1）。
+> 未原生支持的工具，其入口文件（如 CLAUDE.md）只允许**一行引入或符号链接**指向本文件，禁止复制正文——避免多份规则重复注入上下文和版本漂移。符号链接操作规范与三坑见 doc/00 §3.4。
 > 项目记忆在 `.workbuddy/memory/`（知识沉淀，非规则）；设计与进度事实来源在 `doc/`。
 
 ## 一、项目一句话
@@ -10,7 +10,7 @@
 
 ## 二、开工 / 收尾（强制）
 
-- **开工**：读 doc/05-里程碑与进度.md → 读 doc/会话交接.md → 在交接板写「当前持有者=<会话名>」→ git pull
+- **开工**：读 doc/05-里程碑与进度.md → 读 doc/会话交接.md → 读 `.workbuddy/memory/MEMORY.md`（记忆速查）→ 在交接板写「当前持有者=<会话名>」→ git pull
 - **收尾**：更新 doc/05 进度日志 → doc/CHANGELOG.md 顶部追加条目 → 更新交接板并清空持有者 → commit + push
 
 ## 三、技术栈与目录结构
