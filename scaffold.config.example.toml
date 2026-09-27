@@ -1,0 +1,22 @@
+# dev-scaffold 初始化配置示例
+# 用法：复制为 scaffold.config.toml 填写，然后 `python init.py <新项目目录> --config scaffold.config.toml`
+# 也可以不用本文件，直接 `python init.py <新项目目录>` 走交互问答。
+# init.py 只替换下方字段对应的占位符；模板中其余 {{...}} 属于"留待人工填写"的自由内容，
+# 初始化后会打印残留清单，逐项补齐即可。
+
+[project]
+name = "我的项目"                          # → {{项目名}}（AGENTS.md / CLAUDE.md / MEMORY.md 标题）
+brief = "一两句话说清项目做什么、给谁用、核心产出"  # → AGENTS.md「项目一句话」
+background = ""                            # 可选 → doc/00「背景与目标」；留空则该占位符保留待人工填
+
+[stack]
+tech = "语言/框架/数据库/部署方式"          # → AGENTS.md「技术栈」；定稿前可留空
+layout = """                               # → AGENTS.md「目录结构」，一行一条（TOML 多行字符串）
+backend/   后端服务
+frontend/  前端
+doc/       设计文档与进度
+"""
+run = "启动命令、端口"                      # → AGENTS.md「本地运行方式」
+
+[git]
+init = true                                # 初始化后是否 git init + 首次提交

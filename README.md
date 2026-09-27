@@ -36,7 +36,22 @@ dev-scaffold/
         └── 会话交接.md                       （模板）
 ```
 
-## 新项目启用五步
+## 新项目启用
+
+**推荐：一条命令**（Python 3.11+，零第三方依赖）：
+
+```bash
+# 方式一：交互问答（自动生成配置）
+python init.py <新项目目录>
+
+# 方式二：配置文件驱动（可复现/可脚本化）
+cp scaffold.config.example.toml scaffold.config.toml   # 填写后
+python init.py <新项目目录> --config scaffold.config.toml
+```
+
+init.py 会：复制 `template/` 全部内容（含隐藏目录）→ 按配置替换 `{{占位符}}` → 打印替换统计与残留占位符清单（残留项=需人工填写的自由内容）→ 可选 `git init` + 首次提交（`[git] init = true`）。
+
+**手动方式（备选）**：
 
 1. 复制：把 `template/` 下全部内容（含隐藏目录）复制到新项目根目录
 2. 改规则：`AGENTS.md` 中替换 `{{占位符}}`——项目名、技术栈、目录结构；技术栈定稿前可先留空
@@ -53,13 +68,14 @@ git push -u origin main
 ```
 建议仓库保持**私有**（含工程规范虽不涉密，但工作流细节暴露给公众无益）。新项目使用本模板时，同样按私有仓库起步。
 
-## AI 工具兼容机制速查（核实过的事实）
+## AI 工具兼容机制速查（✅实测 ＞ 📄官方文档 ＞ ❓未验证）
 
-| 工具 | 规则加载 |
-|---|---|
-| WorkBuddy / CodeBuddy、ZCode、opencode、Cursor、Codex、Gemini CLI | 根目录 **`AGENTS.md`**（原生或官方兼容，零配置） |
-| Claude Code | 根目录 `CLAUDE.md`（模板已含一行 `@AGENTS.md` 引入） |
-| Trae | `.trae/rules/`（无引入机制，需复制正文并保持同步） |
-| 其他（dsh 等） | 以其官方文档为准；遵循 AGENTS.md 约定则零配置 |
+| 工具 | 规则加载 | 证据 |
+|---|---|---|
+| WorkBuddy / CodeBuddy | 根目录 `AGENTS.md`；`.codebuddy/rules/*.md` 亦自动加载；`.workbuddy/memory/` 记忆注入 | AGENTS.md=📄官方文档+社区多源印证；后两者=✅实测（2026-09-27 真实项目会话） |
+| ZCode、opencode、Cursor、Codex、Gemini CLI | 根目录 **`AGENTS.md`** | 📄各自官方文档（AGENTS.md 开放标准） |
+| Claude Code | 根目录 `CLAUDE.md`（模板已含一行 `@AGENTS.md` 引入） | 📄官方文档（import 机制） |
+| Trae | `.trae/rules/`（无引入机制，需复制正文并保持同步） | ❓未实测 |
+| 其他（dsh 等） | 以其官方文档为准；遵循 AGENTS.md 约定则零配置 | — |
 
-**要点**：规则正文只存 `AGENTS.md` 一份；其他入口只允许一行引入（Trae 除外）；规则与记忆分离（`.workbuddy/memory/` 是记忆不是规则）。
+**要点**：规则正文只存 `AGENTS.md` 一份；其他入口只允许一行引入（Trae 除外）；规则与记忆分离（`.workbuddy/memory/` 是记忆不是规则）。WorkBuddy 求稳可两者都放：`.codebuddy/rules/` 放一行指针指向 AGENTS.md。
