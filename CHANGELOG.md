@@ -3,6 +3,23 @@
 格式：`## YYYY-MM-DD · <会话名>（<改动标题>）`，条目：`- <类型> 改动内容（原因 / 影响范围）`
 （收尾用 `python scripts/closeout.py` 自动插入，勿手工 Edit）
 
+## 2026-10-03 · WorkBuddy 主 agent（脚本缺陷修复：字节级复制 / 备份位置 / 体检误报，+ doc/00 两条新坑）
+
+- fix(scripts): **`sync_rules.py` 两处缺陷 + `closeout.py` 体检误报修复**（起因：把这两个脚本拿到一个真实项目上实跑，暴露了三处问题）
+  - `sync_rules.py` 改为**字节级复制** —— 原用文本模式写，会把 **CRLF 源文件整体翻成 LF**，制造全文件假 diff
+  - `sync_rules.py` 备份位置从 `AGENTS.md.bak` 改到 `.tmp_cleanup/sync_rules_backup/`（**gitignored**）—— 原位置每次同步都在 `git status` 里留一个未跟踪文件
+  - `sync_rules.py --status` 新增检测：目标 **< 200 字符 → 🔴 疑似符号链接退化产物**（内容=目标路径字符串，工具会读不到任何规则）
+  - `closeout.py` `health_check` 修正**误报** —— 原实现「只要超 5,000 字符就 ⚠️」，但「权威源在 `.codebuddy/rules/` 且 AGENTS.md 超限」正是**模式 B 的正常状态**。现改为：权威源已在 rules 目录 → 只给 **ℹ️ 提示**（说明这是已知代价、rules 段仍完整）；权威源不在 rules 目录且 AGENTS.md 超限 → 才 **⚠️ 告警**
+- docs(template): `doc/00` 补两条
+  - §3.1.1 加提醒：**模板自带规则已约 4,200 字符**，离 5,000 上限余量不多，真实项目几天就会越线 → **建议从模式 B 起步**，而不是等越线后再迁移
+  - §3.4 加第四条坑（修符号链接时踩到的）：索引里是 `120000`、工作树已换成普通文件时，**`git add` 不会自动改模式**（提交后仍是 `120000`，别的机器 clone 还会去建链接）→ 必须 `git update-index --add --cacheinfo 100644,$H,<path>`；验证看 `git diff --cached --summary` 是否出现 `mode change 120000 => 100644`
+  - 验证：✅ 在一个真实项目上实跑（规则 9,442 字符 / 源文件 CRLF）
+    - `sync_rules --status` 正确诊断「派生副本 33 字符 → 极可能是符号链接退化产物…ZCode 类工具会读不到任何规则」
+    - 同步后两侧 `md5sum` 相同（`08e8a06f…`）、`--check` exit 0；行尾保持**纯 CRLF**（203 CRLF / 0 裸 LF / 18,048 字节），未被翻成 LF
+    - `closeout` 体检由 ⚠️ **误报**改为 ℹ️ 提示
+    - `git diff --cached --summary` 正确出现 `mode change 120000 => 100644`（若只用 `git add` 则不会）
+    - 三个脚本 `py_compile` 通过；`sync_rules --status` 与 `closeout --dry-run` 在本仓库冒烟正常
+
 ## 2026-10-03 · WorkBuddy 主 agent（规则分发模型纠错 + 支柱八 + 三个配套脚本）
 
 - docs: **规则分发模型纠错** —— 原「规则正文全项目只存 `AGENTS.md` 一份」在 WorkBuddy 上实测不成立：根目录 `AGENTS.md` 注入到 `<project_guidance>` 段，**该段有长度上限、超限静默截断**（实测 8,434 字符时可见部分止于 ≈7,890 字符，丢掉尾部两整节）；而 `.codebuddy/rules/*.md` 走另一通道**完整无截断**。改为**按规则规模分档**：< 5,000 字符单份 / ≥ 5,000 字符时权威源放 `.codebuddy/rules/project-rules.md`、`AGENTS.md` 降为**派生副本**。🔴 同时明确禁止「`.codebuddy/rules/` 只放一行指针指向 AGENTS.md」——那会让 WorkBuddy 拿到「被截断的正文 + 一行指针」，完整规则一节都拿不到

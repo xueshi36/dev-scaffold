@@ -182,14 +182,20 @@ def health_check(proj):
     if os.path.islink(dst):
         out.append("⚠️  AGENTS.md 是符号链接 —— Windows 默认 core.symlinks=false，"
                    "跨机 clone 会退化为含目标路径的文本文件（git 也无法自愈）；建议改为实体文件")
-    if n_src is None and n_dst is None:
-        return out
-    for label, n in (("权威源 .codebuddy/rules/project-rules.md", n_src),
-                     ("AGENTS.md", n_dst)):
-        if n is not None and n > RULES_LIMIT_CHARS:
-            out.append(f"⚠️  {label} 已 {n:,} 字符，超过实测注入上限量级"
-                       f"（{RULES_LIMIT_CHARS:,}）—— 根目录 AGENTS.md 的注入段会被静默截断，"
-                       f"权威源须放 .codebuddy/rules/ 并跑 scripts/sync_rules.py")
+    elif n_dst is not None and n_dst < 200:
+        out.append(f"🔴 AGENTS.md 只有 {n_dst} 字符 —— 极可能是符号链接退化产物"
+                   f"（内容=目标路径字符串），ZCode 类工具会读不到任何规则；跑 scripts/sync_rules.py 修复")
+    if n_src is not None:
+        # 权威源已在 .codebuddy/rules/ —— 这就是「模式 B」，WorkBuddy 侧完整；
+        # AGENTS.md 超限被截断属**已知且接受**的代价，不必每次告警（只作提示）
+        if n_dst is not None and n_dst > RULES_LIMIT_CHARS:
+            out.append(f"ℹ️  AGENTS.md {n_dst:,} 字符 > 注入上限量级 {RULES_LIMIT_CHARS:,} —— "
+                       f"WorkBuddy 的 guidance 段会被截断（**模式 B 的已知代价**，rules 段仍完整无截断）；"
+                       f"ZCode 等只读 AGENTS.md 的工具拿到全文，符合预期")
+    elif n_dst is not None and n_dst > RULES_LIMIT_CHARS:
+        out.append(f"⚠️  AGENTS.md 已 {n_dst:,} 字符 > 注入上限量级 {RULES_LIMIT_CHARS:,}，"
+                   f"且权威源不在 .codebuddy/rules/ —— WorkBuddy 拿到的规则会被静默截断；"
+                   f"应把权威源移到 .codebuddy/rules/project-rules.md 并跑 scripts/sync_rules.py")
     if n_src is not None and n_dst is not None and not os.path.islink(dst):
         a = open(src, encoding="utf-8", newline="").read().replace("\r\n", "\n")
         b = open(dst, encoding="utf-8", newline="").read().replace("\r\n", "\n")
