@@ -39,7 +39,7 @@ PLACEHOLDER_MAP: list[tuple[str, str]] = [
 EXAMPLE_FILES = {".env.example"}
 
 INTERACTIVE_FIELDS = [
-    ("project.name", "项目名（如：取证渗透中台）", None),
+    ("project.name", "项目名（如：订单中台）", None),
     ("project.brief", "项目一句话（做什么/给谁用/核心产出）", None),
     ("project.background", "项目背景（可留空，之后在 doc/00 补）", ""),
     ("stack.tech", "技术栈（可留空，定稿后再填）", ""),

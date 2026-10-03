@@ -1,0 +1,8 @@
+# 本仓库自身的忽略项（template/.gitignore 是给新项目用的，不是给本仓库用的）
+
+# 临时工作区：大输出落盘日志、收尾备份、脚本实测副本
+.tmp_cleanup/
+
+# Python
+__pycache__/
+*.pyc
